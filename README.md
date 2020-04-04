@@ -1,2 +1,2 @@
-# My_SFML_Practice
+# SFML_Kalpa
 try to make my first RPG game
