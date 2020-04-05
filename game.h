@@ -3,8 +3,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-#include "ResourceHolder.hpp"
-#include "ResourceIdentifiers.hpp"
+#include "resourceholder.hpp"
+#include "resourceidentifiers.hpp"
 
 class Game
 {
