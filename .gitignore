@@ -1,3 +1,11 @@
+### Visual Studio
+.vs
+Debug
+*.sln
+*.vcxproj
+*.filters
+*.user
+
 # Prerequisites
 *.d
 
