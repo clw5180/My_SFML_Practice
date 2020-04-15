@@ -6,6 +6,8 @@
 #include "resourceholder.hpp"
 #include "resourceidentifiers.hpp"
 
+#include "statestack.hpp"
+
 class Game
 {
 public:
@@ -14,13 +16,21 @@ public:
 
 private:
 	void ProcessInput();
+	void Update(sf::Time dt);
 	void Render();
 	void UpdateStatistics(sf::Time dt);
+
+	void RegisterStates();
+
 
 	static const sf::Time TimePerFrame;
 
 	sf::RenderWindow mWindow;
-	FontHolder				mFonts;
+	TextureHolder	 mTextures;
+	FontHolder	     mFonts;
+
+	StateStack       mStateStack;
+
 
 	sf::Text				mStatisticsText;
 	sf::Time				mStatisticsUpdateTime;
