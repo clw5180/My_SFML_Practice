@@ -4,6 +4,7 @@
 #include "menustate.hpp"
 #include "utility.hpp"
 #include "resourceholder.hpp"
+#include "utility.hpp"
 
 MenuState::MenuState(StateStack& stack, Context context)
 : State(stack, context)
@@ -14,20 +15,34 @@ MenuState::MenuState(StateStack& stack, Context context)
 	sf::Font& font = context.fonts->get(Fonts::Main);
 
 	mBackgroundSprite.setTexture(texture);
+	resizeBackgroundToWindow(mBackgroundSprite);
 	
 	// A simple menu demonstration
 	sf::Text playOption;
 	playOption.setFont(font);
-	playOption.setString("Play");
+	playOption.setString(L"新章初始");
+	playOption.setCharacterSize(48u);
+	//playOption.setLetterSpacing(2);
 	centerOrigin(playOption);
-	playOption.setPosition(context.window->getView().getSize() / 2.f);
+	playOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 100.f) );
 	mOptions.push_back(playOption);
+
+	sf::Text reloadOption;
+	reloadOption.setFont(font);
+	reloadOption.setString(L"前历再续");  // 如果要显示中文字符的话要用宽字符串(wstring)
+	reloadOption.setCharacterSize(48u);
+	//reloadOption.setLetterSpacing(2);
+	centerOrigin(reloadOption);
+	reloadOption.setPosition(playOption.getPosition() + sf::Vector2f(0.f, 80.f));
+	mOptions.push_back(reloadOption);
 
 	sf::Text exitOption;
 	exitOption.setFont(font);
-	exitOption.setString("Exit");
+	exitOption.setString(L"返回太虚");
+	exitOption.setCharacterSize(48u);
+	//exitOption.setLetterSpacing(2);
 	centerOrigin(exitOption);
-	exitOption.setPosition(playOption.getPosition() + sf::Vector2f(0.f, 30.f));
+	exitOption.setPosition(reloadOption.getPosition() + sf::Vector2f(0.f, 80.f));
 	mOptions.push_back(exitOption);
 
 	updateOptionText();
@@ -100,9 +115,16 @@ void MenuState::updateOptionText()
 		return;
 
 	// White all texts
-	for(sf::Text& text: mOptions)
+	for (sf::Text& text : mOptions)
+	{ 
 		//text.setColor(sf::Color::White);  //deprecated, Use setFillColor() or setOutlineColor() instead.
-		text.setFillColor(sf::Color::White);
+		//text.setFillColor(sf::Color::White);
+
+		text.setFillColor(sf::Color(49, 23, 8));
+		text.setOutlineColor(sf::Color(246, 229, 213));
+		text.setOutlineThickness(3);
+	}
+	  
 
 	// Red the selected text
 	//mOptions[mOptionIndex].setColor(sf::Color::Red);

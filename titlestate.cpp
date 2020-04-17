@@ -3,6 +3,8 @@
 #include "titlestate.hpp"
 #include "utility.hpp"
 #include "resourceholder.hpp"
+#include "utility.hpp"
+
 
 TitleState::TitleState(StateStack& stack, Context context)
 : State(stack, context)
@@ -11,6 +13,7 @@ TitleState::TitleState(StateStack& stack, Context context)
 , mTextEffectTime(sf::Time::Zero)
 {
 	mBackgroundSprite.setTexture(context.textures->get(Textures::TitleScreen));
+	resizeBackgroundToWindow(mBackgroundSprite);
 
 	mText.setFont(context.fonts->get(Fonts::Main));
 	mText.setString("Press any key to start");

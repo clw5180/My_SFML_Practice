@@ -17,6 +17,7 @@ std::string toString(const T& value);
 
 void centerOrigin(sf::Sprite& sprite);
 void centerOrigin(sf::Text& text);
+void resizeBackgroundToWindow(sf::Sprite& backgroundSprite);   
 
 #include "utility.inl"
 #endif // BOOK_UTILITY_HPP

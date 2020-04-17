@@ -15,7 +15,7 @@ namespace Textures
 	{
 		Eagle,
 		Raptor,
-		Desert,
+		Desert,  // TODO
 		TitleScreen,
 	};
 }

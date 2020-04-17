@@ -1,4 +1,7 @@
-
+/************************************************************************/
+/* 截取图片部分区域： texture.loadFromFile("myTexture.png", sf::IntRect(0, 0, 32, 32))
+/* 
+/************************************************************************/
 template <typename Resource, typename Identifier>
 void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename)
 {

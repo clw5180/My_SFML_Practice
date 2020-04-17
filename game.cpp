@@ -10,7 +10,7 @@
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
-:mWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Menus", sf::Style::Close)
+:mWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Menus", sf::Style::Default)
 , mTextures()  // TODO
 , mFonts()     // TODO
 , mStateStack(State::Context(mWindow, mTextures, mFonts))
@@ -20,9 +20,10 @@ Game::Game()
 {
 	mWindow.setKeyRepeatEnabled(false); // you will only get a single event when the key is pressed.
 
-	//mFonts.load(Fonts::Main, "../Media/Sansation.ttf");
-	mFonts.load(Fonts::ID::Main, "../Media/Sansation.ttf");  //TODO
-	mTextures.load(Textures::TitleScreen, "../Media/Textures/TitleScreen.png");
+    // 载入字体
+	mFonts.load(Fonts::Main, "./Media/Traditional_Ancient_India.ttf");  //TODO
+	//mFonts.load(Fonts::Main, "./Media/simhei.ttf");
+	mTextures.load(Textures::TitleScreen, "./Media/Textures/TitleScreen.jpg");
 
 	mStatisticsText.setFont(mFonts.get(Fonts::Main));
 	mStatisticsText.setPosition(5.f, 5.f);
@@ -37,6 +38,12 @@ void Game::Run()
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
+	/************************************************************************/
+	/* 3、最小时间步长：结合了动态时间步长和固定时间步长的方法。
+	/* 通过确保传入 update(dt) 方法的时间参数不那么高（固定为TimePerFrame），而渲染可以实时进行（600FPS也ok）
+	/* 也就是我们通过这个方法设置了最小的帧数，但是没有最大的。
+	/* 详见https://blog.csdn.net/qq_33567644/article/details/91126517?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1
+	/************************************************************************/
 	while (mWindow.isOpen())
 	{
 		sf::Time dt = clock.restart(); //puts the time counter back to zero; returns the time elapsed
