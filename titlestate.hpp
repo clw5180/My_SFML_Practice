@@ -1,10 +1,10 @@
 #ifndef BOOK_TITLESTATE_HPP
 #define BOOK_TITLESTATE_HPP
 
+#include "state.hpp"
+
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
-
-#include "state.hpp"
 
 class TitleState : public State
 {

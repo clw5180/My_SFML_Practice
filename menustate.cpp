@@ -1,10 +1,10 @@
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/View.hpp>
-
 #include "menustate.hpp"
 #include "utility.hpp"
 #include "resourceholder.hpp"
 #include "utility.hpp"
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/View.hpp>
 
 MenuState::MenuState(StateStack& stack, Context context)
 : State(stack, context)
@@ -70,12 +70,12 @@ bool MenuState::handleEvent(const sf::Event& event)
 	if (event.type != sf::Event::KeyPressed)
 		return false;
 
-	if (event.key.code == sf::Keyboard::Return)
+	if (event.key.code == sf::Keyboard::Return) 
 	{
 		if (mOptionIndex == Play)
 		{
 			requestStackPop();
-			requestStackPush(States::Game);
+			requestStackPush(States::Game); // 主菜单回车后，进入游戏状态
 		}
 		else if (mOptionIndex == Exit)
 		{

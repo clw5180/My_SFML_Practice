@@ -13,9 +13,8 @@ namespace Textures
 {
 	enum ID
 	{
-		Eagle,
-		Raptor,
-		Desert,  // TODO
+		MainRole,// TODO
+		Desert,
 		TitleScreen,
 	};
 }

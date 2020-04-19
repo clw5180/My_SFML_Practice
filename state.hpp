@@ -1,13 +1,13 @@
 #ifndef BOOK_STATE_HPP
 #define BOOK_STATE_HPP
 
-#include <memory>
-#include <SFML/System/Time.hpp>
-#include <SFML/Window/Event.hpp>
-
 #include "stateidentifiers.hpp"
 #include "resourceidentifiers.hpp"
 
+#include <SFML/System/Time.hpp>
+#include <SFML/Window/Event.hpp>
+
+#include <memory>
 
 namespace sf
 {
@@ -36,20 +36,13 @@ public:
 	/************************************************************************/
 	struct Context
 	{
-		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts );
-		sf::RenderWindow* window;
-		TextureHolder* textures;
-		FontHolder* fonts;
-	};
-	//struct Context
-	//{
-	//	Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player);
+		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player);
 
-	//	sf::RenderWindow*  window;
-	//	TextureHolder*     textures;
-	//	FontHolder*	       fonts;
-	//	Player*	           player;
-	//};
+		sf::RenderWindow*  window;
+		TextureHolder*     textures;
+		FontHolder*	       fonts;
+		Player*	           player; // clw note：如果需要gamestate的话，才需要加入Player
+	};
 
 
 public:

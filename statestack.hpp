@@ -1,5 +1,10 @@
 #ifndef BOOK_STATESTACK_HPP
 #define BOOK_STATESTACK_HPP
+
+#include "state.hpp"
+#include "stateidentifiers.hpp"
+#include "resourceidentifiers.hpp"
+
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
 
@@ -8,14 +13,11 @@
 #include <functional>
 #include <map>
 
-#include "state.hpp"
-#include "stateidentifiers.hpp"
-#include "resourceidentifiers.hpp"
 
 //namespace sf   // clw note: TODO
 //{
-//	class Event;
-//	class RenderWindow;
+//	//class Event;
+//	//class RenderWindow;
 //}
 
 class StateStack : private sf::NonCopyable  // clw note：把拷贝构造函数和 = 运算符重载 声明为私有

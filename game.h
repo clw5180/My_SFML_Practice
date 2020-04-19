@@ -1,12 +1,12 @@
 #pragma once
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/Text.hpp>
-
 #include "resourceholder.hpp"
 #include "resourceidentifiers.hpp"
-
 #include "statestack.hpp"
+#include "player.hpp"
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 class Game
 {
@@ -28,6 +28,7 @@ private:
 	sf::RenderWindow mWindow;
 	TextureHolder	 mTextures;
 	FontHolder	     mFonts;
+	Player           mPlayer;
 
 	StateStack       mStateStack;
 

@@ -1,10 +1,14 @@
 #include <string>
 
+
 #include "game.h"
 #include "state.hpp"
 #include "stateIdentifiers.hpp"
-#include "menustate.hpp"
+
 #include "titlestate.hpp"
+#include "menustate.hpp"
+#include "gamestate.hpp"
+
 #include "global.h"
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
@@ -13,7 +17,8 @@ Game::Game()
 :mWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Menus", sf::Style::Default)
 , mTextures()  // TODO
 , mFonts()     // TODO
-, mStateStack(State::Context(mWindow, mTextures, mFonts))
+, mPlayer()
+, mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer))
 , mStatisticsText()
 , mStatisticsUpdateTime()
 , mStatisticsNumFrames(0)
@@ -28,6 +33,8 @@ Game::Game()
 	mStatisticsText.setFont(mFonts.get(Fonts::Main));
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(36u);
+
+	//clw note：游戏状态里面的纹理等，是在World类里面加载
 
 	RegisterStates();
 	mStateStack.pushState(States::Title);
@@ -110,6 +117,6 @@ void Game::RegisterStates()
 {
 	mStateStack.registerState<TitleState>(States::Title);
 	mStateStack.registerState<MenuState>(States::Menu);
-	//mStateStack.registerState<GameState>(States::Game);
+	mStateStack.registerState<GameState>(States::Game);
 	//mStateStack.registerState<PauseState>(States::Pause);
 }
