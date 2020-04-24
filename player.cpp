@@ -25,7 +25,23 @@ struct PlayerMover
 	sf::Vector2f velocity;
 };
 
-Player::Player()
+//Player::Player()
+//{
+//	// Set initial key bindings
+//	mKeyBinding[sf::Keyboard::Left] = MoveLeft;
+//	mKeyBinding[sf::Keyboard::Right] = MoveRight;
+//	mKeyBinding[sf::Keyboard::Up] = MoveUp;
+//	mKeyBinding[sf::Keyboard::Down] = MoveDown;
+//
+//	// Set initial action bindings
+//	initializeActions();
+//
+//	// Assign all categories to player's aircraft
+//	for (auto& pair : mActionBinding)
+//		pair.second.category = Category::PlayerAircraft; //TODO
+//}
+
+Player::Player(const TextureHolder& textures) : mSprite(textures.get(Textures::Player))
 {
 	// Set initial key bindings
 	mKeyBinding[sf::Keyboard::Left] = MoveLeft;
@@ -38,11 +54,8 @@ Player::Player()
 
 	// Assign all categories to player's aircraft
 	for (auto& pair : mActionBinding)
-		pair.second.category = Category::PlayerAircraft; //TODO
-}
+		pair.second.category = Category::Player; //TODO
 
-Player::Player(const TextureHolder& textures) : mSprite(textures.get(Textures::MainRole))
-{
 	// Set the Sprite
 	sf::FloatRect bounds = mSprite.getLocalBounds();
 	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -71,6 +84,7 @@ void Player::handleRealtimeInput(CommandQueue& commands)
 	}
 }
 
+// TODO：暂未使用
 void Player::assignKey(Action action, sf::Keyboard::Key key)
 {
 	// Remove all keys that already map to action
@@ -86,6 +100,7 @@ void Player::assignKey(Action action, sf::Keyboard::Key key)
 	mKeyBinding[key] = action;
 }
 
+// TODO：暂未使用
 sf::Keyboard::Key Player::getAssignedKey(Action action) const
 {
 	for(auto pair : mKeyBinding)
@@ -120,6 +135,11 @@ bool Player::isRealtimeAction(Action action)
 		default:
 			return false;
 	}
+}
+
+unsigned int Player::getCategory() const
+{
+	return Category::Player;
 }
 
 void Player::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const

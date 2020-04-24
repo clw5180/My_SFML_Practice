@@ -21,7 +21,7 @@ class GameState : public State
 
 	private:
 		World				mWorld;
-		Player&				mPlayer;
+		Player&				mPlayer; // TODO: “˝”√ or ÷∏’Î£ø
 };
 
 #endif // BOOK_GAMESTATE_HPP

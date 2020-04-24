@@ -28,8 +28,8 @@ class Player : public Entity  // clw Note：如果不写public默认为私有继承
 
 
 	public:
-							    Player();
-		                        Player(const TextureHolder& textures);
+		//Player();
+		Player(const TextureHolder& textures);
 
 		void					handleEvent(const sf::Event& event, CommandQueue& commands);
 		void					handleRealtimeInput(CommandQueue& commands);
@@ -42,8 +42,8 @@ class Player : public Entity  // clw Note：如果不写public默认为私有继承
 		void					initializeActions();
 		static bool				isRealtimeAction(Action action);
 
+		virtual unsigned int	getCategory() const;
 		virtual void		    drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-
 
 	private:
 		std::map<sf::Keyboard::Key, Action>		mKeyBinding;

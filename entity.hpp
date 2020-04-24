@@ -17,8 +17,8 @@ class Entity : public SceneNode
 	private:
 		virtual void		updateCurrent(sf::Time dt);
 
-
-	private:
+    //private:   // clw note: TODO
+	protected:
 		sf::Vector2f		mVelocity;
 };
 

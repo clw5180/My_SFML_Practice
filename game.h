@@ -26,9 +26,10 @@ private:
 	static const sf::Time TimePerFrame;
 
 	sf::RenderWindow mWindow;
+	sf::Image        mIcon;
 	TextureHolder	 mTextures;
 	FontHolder	     mFonts;
-	Player           mPlayer;
+	//Player           mPlayer;
 
 	StateStack       mStateStack;
 

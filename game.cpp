@@ -15,29 +15,36 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
 :mWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Menus", sf::Style::Default)
-, mTextures()  // TODO
-, mFonts()     // TODO
-, mPlayer()
-, mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer))
+, mTextures()  
+, mFonts()     
+//, mPlayer()      // TODO：这里去掉，只在World里面加
+, mStateStack(State::Context(mWindow, mTextures, mFonts))
+//, mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer))
 , mStatisticsText()
 , mStatisticsUpdateTime()
 , mStatisticsNumFrames(0)
 {
 	mWindow.setKeyRepeatEnabled(false); // you will only get a single event when the key is pressed.
+	mWindow.setFramerateLimit(60);      // TODO
 
-    // 载入字体
-	mFonts.load(Fonts::Main, "./Media/Traditional_Ancient_India.ttf");  //TODO
-	//mFonts.load(Fonts::Main, "./Media/simhei.ttf");
-	mTextures.load(Textures::TitleScreen, "./Media/Textures/TitleScreen.jpg");
+	//载入icon
+	if (!mIcon.loadFromFile("./Media/icon.png"))
+		throw std::runtime_error("ResourceHolder::load - Failed to load icon.png");
+	mWindow.setIcon(mIcon.getSize().x, mIcon.getSize().y, mIcon.getPixelsPtr());
 
-	mStatisticsText.setFont(mFonts.get(Fonts::Main));
+    // 载入字体和纹理  (clw note: 游戏状态里面的纹理等，是在World类里面加载)
+	mFonts.load(Fonts::Main, "./Media/Traditional_Ancient_India.ttf"); 
+	mTextures.load(Textures::TitleScreen, "./Media/Textures/TitleScreen.jpg"); 
+	mStatisticsText.setFont(mFonts.get(Fonts::Main));  
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(36u);
 
-	//clw note：游戏状态里面的纹理等，是在World类里面加载
-
+	// 注册所需的状态
 	RegisterStates();
+
+	//将第一个状态（TitleState）push到状态栈mStateStack中
 	mStateStack.pushState(States::Title);
+
 }
 
 void Game::Run()

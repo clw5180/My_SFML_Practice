@@ -13,8 +13,8 @@ namespace Textures
 {
 	enum ID
 	{
-		MainRole,// TODO
-		Desert,
+		Player,// TODO
+		Background,
 		TitleScreen,
 	};
 }

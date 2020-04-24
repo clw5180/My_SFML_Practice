@@ -84,8 +84,8 @@ sf::Transform SceneNode::getWorldTransform() const
 void SceneNode::onCommand(const Command& command, sf::Time dt)
 {
 	// Command current node, if category matches
-	if (command.category & getCategory())
-		command.action(*this, dt);
+	if (command.category & getCategory())  //clw note：注意每个类别都有自己的“类别标识”，在category.hpp中可以添加新的类别
+		command.action(*this, dt);         //         处理所有的SceneNode会调用该方法，对特定的category进行特定的action
 
 	// Command children
 	for(Ptr& child : mChildren)

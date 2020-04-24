@@ -12,9 +12,10 @@ World::World(sf::RenderWindow& window)
 , mTextures() 
 , mSceneGraph()
 , mSceneLayers()
-, mWorldBounds(0.f, 0.f, mWorldView.getSize().x, 2000.f)
+, mWorldBounds(0.f, 0.f, mWorldView.getSize().x, mWorldView.getSize().y)
 , mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
-, mScrollSpeed(-50.f)
+//, mScrollSpeed(-50.f)
+, mScrollSpeed(0)  //TODO
 , mPlayer(nullptr)
 {
 	loadTextures();
@@ -32,7 +33,7 @@ void World::update(sf::Time dt)
 
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!mCommandQueue.isEmpty())
-		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
+		mSceneGraph.onCommand(mCommandQueue.pop(), dt);  //这里来根据获得的命令（行为）做更新，比如之前按了左键得到一个x-200的行为
 	adaptPlayerVelocity();
 
 	// Regular update step, adapt position (correct if outside view)
@@ -58,10 +59,15 @@ CommandQueue& World::getCommandQueue()
 	return mCommandQueue;
 }
 
+Player* World::getPlayer()
+{
+	return mPlayer;
+}
+
 void World::loadTextures()
 {
-	mTextures.load(Textures::MainRole, "./Media/Textures/Eagle.png");
-	mTextures.load(Textures::Desert, "./Media/Textures/Desert.png");
+	mTextures.load(Textures::Player, "./Media/Textures/Eagle.png");
+	mTextures.load(Textures::Background, "./Media/Textures/background.jpg");
 }
 
 void World::buildScene()
@@ -76,7 +82,7 @@ void World::buildScene()
 	}
 
 	// Prepare the tiled background
-	sf::Texture& texture = mTextures.get(Textures::Desert);
+	sf::Texture& texture = mTextures.get(Textures::Background);
 	sf::IntRect textureRect(mWorldBounds);
 	texture.setRepeated(true);
 

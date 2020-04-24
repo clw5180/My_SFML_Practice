@@ -32,6 +32,8 @@ class World : private sf::NonCopyable
 		
 		CommandQueue&						getCommandQueue();
 
+		Player*                             getPlayer(); // clw modify  TODO
+
 
 	private:
 		void								loadTextures();
