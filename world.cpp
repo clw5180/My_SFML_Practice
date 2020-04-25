@@ -66,7 +66,7 @@ Player* World::getPlayer()
 
 void World::loadTextures()
 {
-	mTextures.load(Textures::Player, "./Media/Textures/Eagle.png");
+	mTextures.load(Textures::Player, "./Media/Textures/player.png");  // Eagle
 	mTextures.load(Textures::Background, "./Media/Textures/background.jpg");
 }
 
@@ -81,10 +81,9 @@ void World::buildScene()
 		mSceneGraph.attachChild(std::move(layer));
 	}
 
-	// Prepare the tiled background
 	sf::Texture& texture = mTextures.get(Textures::Background);
 	sf::IntRect textureRect(mWorldBounds);
-	texture.setRepeated(true);
+	//texture.setRepeated(true);  // clw note: the tiled background needed
 
 	// Add the background sprite to the scene
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));

@@ -1,6 +1,5 @@
 #include <string>
 
-
 #include "game.h"
 #include "state.hpp"
 #include "stateIdentifiers.hpp"
@@ -14,8 +13,7 @@
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
-:mWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Menus", sf::Style::Default)
-, mTextures()  
+:mTextures()  
 , mFonts()     
 //, mPlayer()      // TODO：这里去掉，只在World里面加
 , mStateStack(State::Context(mWindow, mTextures, mFonts))
@@ -24,6 +22,7 @@ Game::Game()
 , mStatisticsUpdateTime()
 , mStatisticsNumFrames(0)
 {
+	mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Kalpa", sf::Style::Default); // TODO：可以考虑支持sf::Style::Fullscreen，做一个配置文件，配置是否全屏，参考Cendric
 	mWindow.setKeyRepeatEnabled(false); // you will only get a single event when the key is pressed.
 	mWindow.setFramerateLimit(60);      // TODO
 
@@ -81,7 +80,8 @@ void Game::Run()
 void Game::ProcessInput()
 {
 	sf::Event event;  // 需要 #include <SFML/Window/Event.hpp>，在state.hpp有
-	while (mWindow.pollEvent(event))  // 否则窗口会一直在忙碌状态
+	while (mWindow.pollEvent(event))  //Pop the event on top of the event queue，非阻塞，waitEvent是阻塞
+		                             //(1)一次可能有多个事件; (2)如果不加这句，窗口不会处理来自用户的任何事件，处于“忙碌”状态
 	{
 		mStateStack.handleEvent(event);
 

@@ -14,7 +14,7 @@ class Entity : public SceneNode
 		sf::Vector2f		getVelocity() const;
 
 
-	private:
+	protected:
 		virtual void		updateCurrent(sf::Time dt);
 
     //private:   // clw note: TODO

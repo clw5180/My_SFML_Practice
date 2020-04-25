@@ -44,12 +44,23 @@ class Player : public Entity  // clw Note：如果不写public默认为私有继承
 
 		virtual unsigned int	getCategory() const;
 		virtual void		    drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+		
+		void                    updateCurrent(sf::Time dt);
+		void                    updateAnimation(sf::Time dt);
 
 	private:
 		std::map<sf::Keyboard::Key, Action>		mKeyBinding;
 		std::map<Action, Command>				mActionBinding;
 
 		sf::Sprite			mSprite;
+		sf::IntRect         mTextureRect;
+
+
+
+		sf::Vector2i 			mFrameSize;   // (x,y) 代表 (col, rol)
+		std::size_t 			mCurrentFrame;
+		sf::Time 		        mTimePerFrame;  
+		sf::Time                mElapsedTime;
 };
 
 #endif // BOOK_PLAYER_HPP

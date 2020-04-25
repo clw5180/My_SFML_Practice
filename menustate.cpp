@@ -24,7 +24,7 @@ MenuState::MenuState(StateStack& stack, Context context)
 	playOption.setCharacterSize(48u);
 	//playOption.setLetterSpacing(2);
 	centerOrigin(playOption);
-	playOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 100.f) );
+	playOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 100.f) ); //clw note
 	mOptions.push_back(playOption);
 
 	sf::Text reloadOption;
