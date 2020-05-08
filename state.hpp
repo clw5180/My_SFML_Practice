@@ -41,7 +41,6 @@ public:
 		sf::RenderWindow*  window;
 		TextureHolder*     textures;
 		FontHolder*	       fonts;
-		Player*	           player; // clw note：如果需要gamestate的话，才需要加入Player
 	};
 
 

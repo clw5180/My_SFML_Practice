@@ -1,8 +1,7 @@
 #include "menustate.hpp"
-#include "utility.hpp"
+#include "utility.hpp"  // for centerOrigin()
 #include "resourceholder.hpp"
-#include "utility.hpp"
-
+#include "global.h"     // for FONT_SIZE_LARGE
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
@@ -21,7 +20,7 @@ MenuState::MenuState(StateStack& stack, Context context)
 	sf::Text playOption;
 	playOption.setFont(font);
 	playOption.setString(L"新章初始");
-	playOption.setCharacterSize(48u);
+	playOption.setCharacterSize(FONT_SIZE_LARGE);
 	//playOption.setLetterSpacing(2);
 	centerOrigin(playOption);
 	playOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 100.f) ); //clw note
@@ -30,7 +29,7 @@ MenuState::MenuState(StateStack& stack, Context context)
 	sf::Text reloadOption;
 	reloadOption.setFont(font);
 	reloadOption.setString(L"前历再续");  // 如果要显示中文字符的话要用宽字符串(wstring)
-	reloadOption.setCharacterSize(48u);
+	reloadOption.setCharacterSize(FONT_SIZE_LARGE);
 	//reloadOption.setLetterSpacing(2);
 	centerOrigin(reloadOption);
 	reloadOption.setPosition(playOption.getPosition() + sf::Vector2f(0.f, 80.f));
@@ -39,7 +38,7 @@ MenuState::MenuState(StateStack& stack, Context context)
 	sf::Text exitOption;
 	exitOption.setFont(font);
 	exitOption.setString(L"返回太虚");
-	exitOption.setCharacterSize(48u);
+	exitOption.setCharacterSize(FONT_SIZE_LARGE);
 	//exitOption.setLetterSpacing(2);
 	centerOrigin(exitOption);
 	exitOption.setPosition(reloadOption.getPosition() + sf::Vector2f(0.f, 80.f));

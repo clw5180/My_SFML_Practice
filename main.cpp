@@ -7,8 +7,8 @@ int main()
 {
 	try
 	{
-		Game game;
-		game.Run();
+		//Game game;
+		Game::Instance()->Run();
 	}
 	catch (std::exception& e)
 	{

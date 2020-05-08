@@ -17,6 +17,8 @@ std::string toString(const T& value);
 
 void centerOrigin(sf::Sprite& sprite);
 void centerOrigin(sf::Text& text);
+void topLeftOrigin(sf::Text& text);
+void topRightOrigin(sf::Text& text);
 void resizeBackgroundToWindow(sf::Sprite& backgroundSprite);   
 
 #include "utility.inl"

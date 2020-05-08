@@ -1,6 +1,8 @@
 #include "player.hpp"
 #include "resourceholder.hpp"
 #include "commandqueue.hpp"
+#include "world.hpp"
+#include "global.h"     // for PLAYER_SPEED
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -41,10 +43,10 @@ struct PlayerMover
 //		pair.second.category = Category::PlayerAircraft; //TODO
 //}
 
-Player::Player(const TextureHolder& textures) 
-: mSprite(textures.get(Textures::Player))
+Player::Player(sf::Texture& texture) // clw note: 注意这里必须传引用，否则传过来的是拷贝，纹理会被释放掉，造成屏幕上显示的Sprite就是一个白色的框框...
+: mSprite(texture)
 , mFrameSize(3, 4)  // hardcode
-, mTimePerFrame(sf::seconds(0.25))
+, mFrameDuration(sf::seconds(0.25))
 {
 	mTextureRect = sf::IntRect(mSprite.getTextureRect().width / mFrameSize.x, 0, mSprite.getTextureRect().width / mFrameSize.x, mSprite.getTextureRect().height / mFrameSize.y);  //clw note: TODO 
 
@@ -62,8 +64,9 @@ Player::Player(const TextureHolder& textures)
 		pair.second.category = Category::Player; //TODO
 
 	// Set the Sprite
-	sf::FloatRect bounds = mSprite.getLocalBounds();
-	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+	//sf::FloatRect bounds = mSprite.getLocalBounds();
+	//mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+	mSprite.setOrigin(mTextureRect.width / 2.f, mTextureRect.height / 2.f);
 }
 
 void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
@@ -118,7 +121,7 @@ sf::Keyboard::Key Player::getAssignedKey(Action action) const
 
 void Player::initializeActions()
 {
-	const float playerSpeed = 200.f;
+	const float playerSpeed = PLAYER_SPEED; // clw note: 1s 走 playerSpeed个pixel，
 
 	mActionBinding[MoveLeft].action = derivedAction<Player>(PlayerMover(-playerSpeed, 0.f));
 	mActionBinding[MoveRight].action = derivedAction<Player>(PlayerMover(+playerSpeed, 0.f));
@@ -154,43 +157,42 @@ void Player::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) cons
 void Player::updateCurrent(sf::Time dt)
 {
 	updateAnimation(dt);
-
-	// apply velocity
-	Entity::updateCurrent(dt);
 }
 
+//TODO 
 void Player::updateAnimation(sf::Time dt)
 {
 	int numFrames = mFrameSize.x * mFrameSize.y;
 
 	mElapsedTime += dt;
 
+	////// 1、角色行走动画更新
+	// 注意限制角色不能移动超出大地图的边界 的判断在World类的adaptPlayerPosition() 
 
-	// TODO
 	// 立刻切换到向左走的framerow，也就是第1行
-	if (getVelocity().x < 0.f)
+	if (this->getVelocity().x < 0.f)
 		mTextureRect.top = mTextureRect.height;
 	// 立刻切换到向右走的framerow，也就是第2行
-	if (getVelocity().x > 0.f)
+	if (this->getVelocity().x > 0.f)
 		mTextureRect.top = 2 * mTextureRect.height;
 	// 立刻切换到向上走的framerow，也就是第3行
-	if (getVelocity().y < 0.f)
+	if (this->getVelocity().y < 0.f)
 		mTextureRect.top = 3 * mTextureRect.height;
 	// 立刻切换到向下走的framerow，也就是第0行
-	if (getVelocity().y > 0.f)
+	if (this->getVelocity().y > 0.f)
 		mTextureRect.top = 0;
 
 	// 立刻停下
-	if (getVelocity().x == 0.f && getVelocity().y == 0.f)
+	if (this->getVelocity().x == 0.f && this->getVelocity().y == 0.f)
 	{
 		mTextureRect.left = mTextureRect.width;
 	}
 
 	//行走动画不会立刻更新，而是根据每一帧持续的时间来update
-	while (mElapsedTime >= mTimePerFrame)
+	while (mElapsedTime >= mFrameDuration)
 	{ 
 		// go left
-		if (getVelocity().x != 0.f or getVelocity().y != 0)
+		if (this->getVelocity().x != 0.f or this->getVelocity().y != 0)
 		{ 
 			mTextureRect.left += mTextureRect.width;
 			if (mTextureRect.left == 2 * mTextureRect.width)
@@ -198,8 +200,10 @@ void Player::updateAnimation(sf::Time dt)
 		}
 
 		// And progress to next frame
-		mElapsedTime -= mTimePerFrame;
+		mElapsedTime -= mFrameDuration;
 	}
-
 	mSprite.setTextureRect(mTextureRect);
+	
+	////// 2、移动，相当于Entity的updateCurrent()方法
+	move(mVelocity * dt.asSeconds());
 }

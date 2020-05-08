@@ -16,12 +16,15 @@ class GameState : public State
 
 		virtual void		draw();
 		virtual bool		update(sf::Time dt);
+
 		virtual bool		handleEvent(const sf::Event& event);
 
 
 	private:
 		World				mWorld;
 		Player&				mPlayer; // TODO: “˝”√ or ÷∏’Î£ø
+		sf::Text			mPlayerPosX;
+		sf::Text			mPlayerPosY;
 };
 
 #endif // BOOK_GAMESTATE_HPP

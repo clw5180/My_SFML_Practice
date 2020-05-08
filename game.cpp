@@ -9,7 +9,9 @@
 #include "gamestate.hpp"
 
 #include "global.h"
+#include "utility.hpp"   // for topLeftOrigin() 
 
+Game* Game::s_pGame = new Game();
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
@@ -35,14 +37,21 @@ Game::Game()
 	mFonts.load(Fonts::Main, "./Media/Traditional_Ancient_India.ttf"); 
 	mTextures.load(Textures::TitleScreen, "./Media/Textures/TitleScreen.jpg"); 
 	mStatisticsText.setFont(mFonts.get(Fonts::Main));  
-	mStatisticsText.setPosition(5.f, 5.f);
-	mStatisticsText.setCharacterSize(36u);
+	
+	mStatisticsText.setCharacterSize(FONT_SIZE_MIDDLE);
+	//topRightOrigin(mStatisticsText);  //clw note: 因为此时mStatisticsText为空，所以这一句不会起任何作用，getLocalBounds()得到的全部是0
+	mStatisticsText.setPosition(MAP_FONT_BOARDER, MAP_FONT_BOARDER);
 
 	// 注册所需的状态
 	RegisterStates();
 
 	//将第一个状态（TitleState）push到状态栈mStateStack中
 	mStateStack.pushState(States::Title);
+
+}
+
+Game::~Game()
+{
 
 }
 
@@ -100,7 +109,7 @@ void Game::Render()
 	mWindow.clear();
 
 	mStateStack.draw();
-
+	sf::View aaa = mWindow.getDefaultView(); // TODOTODO ????? 为什么FPS文字可以跟随窗口移动
 	mWindow.setView(mWindow.getDefaultView());
 	mWindow.draw(mStatisticsText);
 
@@ -111,11 +120,20 @@ void Game::UpdateStatistics(sf::Time dt)
 {
 	mStatisticsUpdateTime += dt;
 	mStatisticsNumFrames += 1;
-	if (mStatisticsUpdateTime >= sf::seconds(1.0f))
-	{
-		mStatisticsText.setString("FPS: " + std::to_string(mStatisticsNumFrames));
+	//if (mStatisticsUpdateTime >= sf::seconds(1.0f))
+	//{
+	//	mStatisticsText.setString("FPS: " + std::to_string(mStatisticsNumFrames));
 
-		mStatisticsUpdateTime -= sf::seconds(1.0f);
+	//	mStatisticsUpdateTime -= sf::seconds(1.0f);
+	//	mStatisticsNumFrames = 0;
+	//}
+
+	if (mStatisticsNumFrames == 60)
+	{
+		mStatisticsText.setString("FPS: " + std::to_string(1.0 / mStatisticsUpdateTime.asSeconds() * 60.0).substr(0, 4));
+
+		//mStatisticsUpdateTime -= sf::seconds(1.0f);
+		mStatisticsUpdateTime = sf::Time::Zero;
 		mStatisticsNumFrames = 0;
 	}
 }

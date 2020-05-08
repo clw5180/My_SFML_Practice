@@ -27,13 +27,15 @@ class World : private sf::NonCopyable
 {
 	public:
 		explicit							World(sf::RenderWindow& window);
+		~World();
 		void								update(sf::Time dt);
+		void                                updateWorldView(sf::Time dt);  // sub func of update()
 		void								draw();
+		sf::View                            getWorldView() { return mWorldView; }
 		
-		CommandQueue&						getCommandQueue();
+		CommandQueue&						getCommandQueue() { return mCommandQueue; }
 
-		Player*                             getPlayer(); // clw modify  TODO
-
+		Player*                             getPlayer() { return mPlayer; }  // clw modify  TODO
 
 	private:
 		void								loadTextures();
@@ -52,7 +54,9 @@ class World : private sf::NonCopyable
 
 
 	private:
-		sf::RenderWindow&					mWindow;
+
+
+		sf::RenderWindow&			        mWindow;
 		sf::View							mWorldView;
 		TextureHolder						mTextures;
 
@@ -60,10 +64,11 @@ class World : private sf::NonCopyable
 		std::array<SceneNode*, LayerCount>	mSceneLayers;
 		CommandQueue						mCommandQueue;
 
-		sf::FloatRect						mWorldBounds;
+		sf::FloatRect						mWorldBounds;  // TODO：暂时没有用到，而是取场景地图图片纹理的宽高，来判断边界；后期考虑用这个
 		sf::Vector2f						mSpawnPosition;
 		float								mScrollSpeed;
 		Player*							    mPlayer;
+
 };
 
 #endif // BOOK_WORLD_HPP

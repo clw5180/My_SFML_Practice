@@ -18,6 +18,18 @@ void centerOrigin(sf::Text& text)
 	text.setOrigin(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));
 }
 
+void topLeftOrigin(sf::Text& text)
+{
+	sf::FloatRect bounds = text.getLocalBounds();
+	text.setOrigin(std::floor(bounds.left + bounds.width), std::floor(bounds.top));
+}
+
+void topRightOrigin(sf::Text& text)
+{
+	sf::FloatRect bounds = text.getLocalBounds();
+	text.setOrigin(std::floor(bounds.left + bounds.width), std::floor(bounds.top));
+}
+
 void resizeBackgroundToWindow(sf::Sprite& backgroundSprite)
 {
 	/************************************************************************/

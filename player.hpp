@@ -29,7 +29,7 @@ class Player : public Entity  // clw Note：如果不写public默认为私有继承
 
 	public:
 		//Player();
-		Player(const TextureHolder& textures);
+		Player(sf::Texture& texture);
 
 		void					handleEvent(const sf::Event& event, CommandQueue& commands);
 		void					handleRealtimeInput(CommandQueue& commands);
@@ -59,7 +59,7 @@ class Player : public Entity  // clw Note：如果不写public默认为私有继承
 
 		sf::Vector2i 			mFrameSize;   // (x,y) 代表 (col, rol)
 		std::size_t 			mCurrentFrame;
-		sf::Time 		        mTimePerFrame;  
+		sf::Time 		        mFrameDuration;  //mTimePerFrame 
 		sf::Time                mElapsedTime;
 };
 

@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include "global.h"   // for WINDOW_HEIGHT and WINDOW_WIDTH
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -13,9 +14,9 @@ World::World(sf::RenderWindow& window)
 , mSceneGraph()
 , mSceneLayers()
 , mWorldBounds(0.f, 0.f, mWorldView.getSize().x, mWorldView.getSize().y)
-, mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
+, mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldView.getSize().y / 2.f)
 //, mScrollSpeed(-50.f)
-, mScrollSpeed(0)  //TODO
+, mScrollSpeed(0) 
 , mPlayer(nullptr)
 {
 	loadTextures();
@@ -23,6 +24,9 @@ World::World(sf::RenderWindow& window)
 
 	// Prepare the view
 	mWorldView.setCenter(mSpawnPosition);
+
+	mWorldBounds = sf::FloatRect(0, 0, mTextures.get(Textures::Background).getSize().x,
+						               mTextures.get(Textures::Background).getSize().y);
 }
 
 void World::update(sf::Time dt)
@@ -41,9 +45,54 @@ void World::update(sf::Time dt)
 	adaptPlayerPosition();
 }
 
+void World::updateWorldView(sf::Time dt)
+{
+	////// 视角移动
+	// （1）position x/y距边缘均大于窗口宽/高一半的区域，视角会正常推动；
+	// （2）position y距上或下边缘小于等于窗口高一半，x距左右边缘均大于窗口宽一半，视角左右推动
+	// （3）position x距左或右边缘小于等于窗口宽一半，y距上下边缘均大于窗口高一半，视角上下推动
+	// （4）position x/y距边缘均小于窗口宽/高一半的区域，视角不推动
+	sf::Vector2f playerPosition = mPlayer->getPosition();
+	sf::Vector2f playerVelocity = mPlayer->getVelocity();
+
+
+	// （1）
+	if (playerPosition.x > WINDOW_WIDTH / 2 &&
+		playerPosition.y > WINDOW_HEIGHT / 2 &&
+		playerPosition.x < mWorldBounds.width - WINDOW_WIDTH / 2 &&
+		playerPosition.y < mWorldBounds.height - WINDOW_HEIGHT / 2)
+	{
+		mWorldView.move(playerVelocity.x * dt.asSeconds(), playerVelocity.y * dt.asSeconds());
+	}
+
+	// （2）
+	if (playerPosition.x > WINDOW_WIDTH / 2 &&
+		playerPosition.x < mWorldBounds.width - WINDOW_WIDTH / 2 &&
+		(playerPosition.y <= WINDOW_HEIGHT / 2 || 
+		playerPosition.y >= mWorldBounds.height - WINDOW_HEIGHT / 2))
+	{
+		mWorldView.move(playerVelocity.x * dt.asSeconds(), 0);
+	}
+
+	// （3）
+	if (playerPosition.y > WINDOW_HEIGHT / 2 &&
+		playerPosition.y < mWorldBounds.height - WINDOW_HEIGHT / 2 &&
+		(playerPosition.x <= WINDOW_WIDTH / 2 ||
+		playerPosition.x >= mWorldBounds.width - WINDOW_WIDTH / 2))
+	{
+		mWorldView.move(0, playerVelocity.y * dt.asSeconds());
+	}
+}
+
+World::~World()
+{
+
+}
+
+
 void World::draw()
 {
-	mWindow.setView(mWorldView);
+	mWindow.setView(mWorldView);  //注：setView必须放在draw()而不是update()，不然画面会有撕裂感；
 	mWindow.draw(mSceneGraph);
 	/************************************************************************/
 	/*	自注：draw的实现如下
@@ -54,15 +103,6 @@ void World::draw()
 	/************************************************************************/
 }
 
-CommandQueue& World::getCommandQueue()
-{
-	return mCommandQueue;
-}
-
-Player* World::getPlayer()
-{
-	return mPlayer;
-}
 
 void World::loadTextures()
 {
@@ -82,7 +122,9 @@ void World::buildScene()
 	}
 
 	sf::Texture& texture = mTextures.get(Textures::Background);
-	sf::IntRect textureRect(mWorldBounds);
+
+	sf::IntRect textureRect = sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y);
+	//sf::IntRect textureRect(mWorldBounds);   
 	//texture.setRepeated(true);  // clw note: the tiled background needed
 
 	// Add the background sprite to the scene
@@ -91,17 +133,18 @@ void World::buildScene()
 	mSceneLayers[Background]->attachChild(std::move(backgroundSprite));
 
 	// Add player's aircraft
-	std::unique_ptr<Player> leader(new Player(mTextures)); // TODO:bug
+	std::unique_ptr<Player> leader(new Player(mTextures.get(Textures::Player))); 
 	mPlayer = leader.get();
 	mPlayer->setPosition(mSpawnPosition);
 	mSceneLayers[Air]->attachChild(std::move(leader));
 }
 
+////// 角色行走，大地图角色边缘碰撞检测
 void World::adaptPlayerPosition()
 {
 	// Keep player's position inside the screen bounds, at least borderDistance units from the border
 	sf::FloatRect viewBounds(mWorldView.getCenter() - mWorldView.getSize() / 2.f, mWorldView.getSize());
-	const float borderDistance = 40.f;
+	const float borderDistance = MAP_PLAYER_BOARDER;
 
 	sf::Vector2f position = mPlayer->getPosition();
 	position.x = std::max(position.x, viewBounds.left + borderDistance);
@@ -120,5 +163,5 @@ void World::adaptPlayerVelocity()
 		mPlayer->setVelocity(velocity / std::sqrt(2.f));
 
 	// Add scrolling velocity
-	mPlayer->accelerate(0.f, mScrollSpeed);
+	//mPlayer->accelerate(0.f, mScrollSpeed);
 }

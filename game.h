@@ -13,10 +13,19 @@
 class Game
 {
 public:
-	Game();
+	static Game* Instance()
+	{
+		if (s_pGame == NULL)
+			s_pGame = new Game();
+		return s_pGame;
+	}
+
 	void Run();
 
 private:
+	Game();
+	~Game();
+
 	void ProcessInput();
 	void Update(sf::Time dt);
 	void Render();
@@ -39,4 +48,6 @@ private:
 	sf::Text				mStatisticsText;
 	sf::Time				mStatisticsUpdateTime;
 	std::size_t				mStatisticsNumFrames;
+
+	static Game* s_pGame;
 };
