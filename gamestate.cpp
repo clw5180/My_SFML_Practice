@@ -18,7 +18,7 @@ GameState::GameState(StateStack& stack, Context context)
 	//playOption.setLetterSpacing(2);
 	//centerOrigin(mPlayerPosX);
 	topRightOrigin(mPlayerPosX);
-	//mPlayerPosX.setPosition(context.window->getView().getSize() / 2.f); //clw note
+	mPlayerPosX.setPosition(context.window->getView().getSize() / 2.f); //clw note
 
 	mPlayerPosY.setFont(font);
 	mPlayerPosY.setString(L"Y: 0.00");
@@ -26,7 +26,7 @@ GameState::GameState(StateStack& stack, Context context)
 	//playOption.setLetterSpacing(2);
 	//centerOrigin(mPlayerPosY);
 	topRightOrigin(mPlayerPosY);
-	//mPlayerPosY.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 50.f)); //clw note
+	mPlayerPosY.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 50.f)); //clw note
 }
 
 void GameState::draw()

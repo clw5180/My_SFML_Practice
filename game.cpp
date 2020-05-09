@@ -104,13 +104,17 @@ void Game::Update(sf::Time dt)
 	mStateStack.update(dt);
 }
 
+
 void Game::Render()
 {
+	//static int i = 0;
 	mWindow.clear();
 
 	mStateStack.draw();
 	sf::View aaa = mWindow.getDefaultView(); // TODOTODO ????? 为什么FPS文字可以跟随窗口移动
-	mWindow.setView(mWindow.getDefaultView());
+	//aaa.setCenter(sf::Vector2f(800+i, 600+i));
+	//i++;
+	mWindow.setView(aaa);
 	mWindow.draw(mStatisticsText);
 
 	mWindow.display();
@@ -118,8 +122,12 @@ void Game::Render()
 
 void Game::UpdateStatistics(sf::Time dt)
 {
+	////// 计算FPS  TODO
+	
+	////////////////////////////////////////////////////
 	mStatisticsUpdateTime += dt;
 	mStatisticsNumFrames += 1;
+	//method 1
 	//if (mStatisticsUpdateTime >= sf::seconds(1.0f))
 	//{
 	//	mStatisticsText.setString("FPS: " + std::to_string(mStatisticsNumFrames));
@@ -128,6 +136,7 @@ void Game::UpdateStatistics(sf::Time dt)
 	//	mStatisticsNumFrames = 0;
 	//}
 
+	//method 2
 	if (mStatisticsNumFrames == 60)
 	{
 		mStatisticsText.setString("FPS: " + std::to_string(1.0 / mStatisticsUpdateTime.asSeconds() * 60.0).substr(0, 4));
@@ -136,6 +145,18 @@ void Game::UpdateStatistics(sf::Time dt)
 		mStatisticsUpdateTime = sf::Time::Zero;
 		mStatisticsNumFrames = 0;
 	}
+	////////////////////////////////////////////////////////
+
+
+	///////////////////////////////////////////////////////
+	//method 3
+	//mStatisticsUpdateTime += dt;
+	//if (mStatisticsUpdateTime >= sf::seconds(1.0f))
+	//{
+	//	mStatisticsText.setString("FPS: " + std::to_string(1000000.0f / dt.asMicroseconds()).substr(0, 4));
+	//	mStatisticsUpdateTime -= sf::seconds(1.0f);
+	//}
+	/////////////////////////////////////////////////////////
 }
 
 void Game::RegisterStates()

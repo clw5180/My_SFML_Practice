@@ -5,6 +5,11 @@ Debug
 *.vcxproj
 *.filters
 *.user
+*.dll
+*.lib
+*.pdb
+*.rc
+*.aps
 
 # Prerequisites
 *.d

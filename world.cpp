@@ -92,15 +92,14 @@ World::~World()
 
 void World::draw()
 {
-	mWindow.setView(mWorldView);  //注：setView必须放在draw()而不是update()，不然画面会有撕裂感；
+	mWindow.setView(mWorldView);  
 	mWindow.draw(mSceneGraph);
-	/************************************************************************/
-	/*	自注：draw的实现如下
-	/*  void RenderTarget::draw(const Drawable& drawable, const RenderStates& states)
-	/*	{
-	/*		drawable.draw(*this, states); // 这里this其实就是mWindow，其父类就是RenderTarget
-	/*	}
-	/************************************************************************/
+	//	自注：draw的实现如下
+	//  void RenderTarget::draw(const Drawable& drawable, const RenderStates& states)
+	//	{
+	//		drawable.draw(*this, states); // 这里this其实就是mWindow，其父类就是RenderTarget
+	//	}
+
 }
 
 
