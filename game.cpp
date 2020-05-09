@@ -1,5 +1,3 @@
-#include <string>
-
 #include "game.h"
 #include "state.hpp"
 #include "stateIdentifiers.hpp"
@@ -10,6 +8,8 @@
 
 #include "global.h"
 #include "utility.hpp"   // for topLeftOrigin() 
+
+#include <string>
 
 Game* Game::s_pGame = new Game();
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
@@ -111,10 +111,8 @@ void Game::Render()
 	mWindow.clear();
 
 	mStateStack.draw();
-	sf::View aaa = mWindow.getDefaultView(); // TODOTODO ????? 为什么FPS文字可以跟随窗口移动
-	//aaa.setCenter(sf::Vector2f(800+i, 600+i));
-	//i++;
-	mWindow.setView(aaa);
+
+	mWindow.setView(mWindow.getDefaultView()); // clw note: 只有这样，该Text才会在人物行走之后，依然一直在窗口左上角https://www.sfml-dev.org/tutorials/2.5/graphics-view.php
 	mWindow.draw(mStatisticsText);
 
 	mWindow.display();

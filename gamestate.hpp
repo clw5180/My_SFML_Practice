@@ -25,6 +25,7 @@ class GameState : public State
 		Player&				mPlayer; // TODO: “˝”√ or ÷∏’Î£ø
 		sf::Text			mPlayerPosX;
 		sf::Text			mPlayerPosY;
+		sf::Time			mStatisticsUpdateTime;
 };
 
 #endif // BOOK_GAMESTATE_HPP
