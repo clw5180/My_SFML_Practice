@@ -16,18 +16,17 @@ GameState::GameState(StateStack& stack, Context context)
 	sf::Font& font = context.fonts->get(Fonts::Main);
 
 	mPlayerPosX.setFont(font);
-	mPlayerPosX.setString("X_Player: 0000"); // clw TODO: 占位符，这样比如1000.0也能显示出来
+	mPlayerPosX.setString("X_Player: 00000"); // clw TODO: 占位符，否则从999到1000的时候，如果是右上角对齐则会抖动
 	mPlayerPosX.setCharacterSize(FONT_SIZE_MIDDLE);
 	//playOption.setLetterSpacing(2);
-	topRightOrigin(mPlayerPosX);
 	mPlayerPosX.setPosition(sf::Vector2f(context.window->getView().getSize().x - MAP_FONT_BOARDER, MAP_FONT_BOARDER)); //clw note
+	topRightOrigin(mPlayerPosX);  // 在初始化的时候把长度定死，否则右对齐的时候，从999到1000会比较麻烦
 
 	mPlayerPosY.setFont(font);
-	mPlayerPosY.setString("Y_Player: 0000");
+	mPlayerPosY.setString("Y_Player: 00000");
 	mPlayerPosY.setCharacterSize(FONT_SIZE_MIDDLE);
-	//playOption.setLetterSpacing(2);
-	topRightOrigin(mPlayerPosY);
 	mPlayerPosY.setPosition(sf::Vector2f(context.window->getView().getSize().x - MAP_FONT_BOARDER, MAP_FONT_BOARDER) + sf::Vector2f(0.f, 50.f)); //clw note
+	topRightOrigin(mPlayerPosY);
 }
 
 void GameState::draw()
@@ -52,13 +51,21 @@ bool GameState::update(sf::Time dt)
 
 	////// 更新场景参数
 	mStatisticsUpdateTime += dt;
-	if (mStatisticsUpdateTime >= sf::seconds(0.1f))
+	if (mStatisticsUpdateTime >= sf::seconds(STATISTICS_UPDATE_TIME))
 	{
-		mStatisticsUpdateTime -= sf::seconds(0.1f);
+		mStatisticsUpdateTime -= sf::seconds(STATISTICS_UPDATE_TIME);
 
-		mPlayerPosX.setString("X_Player: " + std::to_string(int(mPlayer.getPosition().x)));
-		mPlayerPosY.setString("Y_Player: " + std::to_string(int(mPlayer.getPosition().y)));
+		//FPS小数点后保留一位
+		std::string strPosX = std::to_string(int(mPlayer.getPosition().x));
+		int pos = strPosX.length();
+		mPlayerPosX.setString("X_Player: " + strPosX);
+		//topRightOrigin(mPlayerPosX); // 因为strPosX长度一直在变化，所以每次更新都要重新让输出文字右上角对齐
+
+		std::string strPosY = std::to_string(int(mPlayer.getPosition().y));
+		pos = strPosY.length();
+		mPlayerPosY.setString("Y_Player: " + strPosY);
 	}
+
 	return true;
 }
 

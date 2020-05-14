@@ -46,7 +46,7 @@ struct PlayerMover
 Player::Player(sf::Texture& texture) // clw note: 注意这里必须传引用，否则传过来的是拷贝，纹理会被释放掉，造成屏幕上显示的Sprite就是一个白色的框框...
 : mSprite(texture)
 , mFrameSize(3, 4)  // hardcode
-, mFrameDuration(sf::seconds(0.25))
+, mFrameDuration(sf::seconds(FRAME_DURATION))
 {
 	mTextureRect = sf::IntRect(mSprite.getTextureRect().width / mFrameSize.x, 0, mSprite.getTextureRect().width / mFrameSize.x, mSprite.getTextureRect().height / mFrameSize.y);  //clw note: TODO 
 

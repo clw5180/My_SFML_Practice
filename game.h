@@ -47,7 +47,7 @@ private:
 
 	sf::Text				mStatisticsText;
 	sf::Time				mStatisticsUpdateTime;
-	std::size_t				mStatisticsNumFrames;
+	std::size_t			    mStatisticsNumFrames;
 
 	static Game* s_pGame;
 };

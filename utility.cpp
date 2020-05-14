@@ -21,7 +21,7 @@ void centerOrigin(sf::Text& text)
 void topLeftOrigin(sf::Text& text)
 {
 	sf::FloatRect bounds = text.getLocalBounds();
-	text.setOrigin(std::floor(bounds.left + bounds.width), std::floor(bounds.top));
+	text.setOrigin(std::floor(bounds.left), std::floor(bounds.top));
 }
 
 void topRightOrigin(sf::Text& text)

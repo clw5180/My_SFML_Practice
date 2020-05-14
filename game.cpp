@@ -12,7 +12,7 @@
 #include <string>
 
 Game* Game::s_pGame = new Game();
-const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f); // FPS
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / FPS);
 
 Game::Game()
 :mTextures()  
@@ -22,11 +22,12 @@ Game::Game()
 //, mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer))
 , mStatisticsText()
 , mStatisticsUpdateTime()
-, mStatisticsNumFrames(0)
+, mStatisticsNumFrames()
 {
 	mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Kalpa", sf::Style::Default); // TODO：可以考虑支持sf::Style::Fullscreen，做一个配置文件，配置是否全屏，参考Cendric
 	mWindow.setKeyRepeatEnabled(false); // you will only get a single event when the key is pressed.
-	mWindow.setFramerateLimit(60);      // FPS限制  TODO
+	//mWindow.setFramerateLimit(60);      // FPS限制，导致非实时渲染  TODO
+	//mWindow.setVerticalSyncEnabled(true);   // FPS限制，导致非实时渲染  TODO
 
 	//载入icon
 	if (!mIcon.loadFromFile("./Media/icon.png"))
@@ -39,7 +40,7 @@ Game::Game()
 	mStatisticsText.setFont(mFonts.get(Fonts::Main));  
 	
 	mStatisticsText.setCharacterSize(FONT_SIZE_MIDDLE);
-	//topRightOrigin(mStatisticsText);  //clw note: 因为此时mStatisticsText为空，所以这一句不会起任何作用，getLocalBounds()得到的全部是0
+	topLeftOrigin(mStatisticsText);  //clw note: 因为此时mStatisticsText为空，所以这一句不会起任何作用，getLocalBounds()得到的全部是0
 	mStatisticsText.setPosition(MAP_FONT_BOARDER, MAP_FONT_BOARDER);
 
 	// 注册所需的状态
@@ -134,12 +135,11 @@ void Game::Render()
 
 void Game::UpdateStatistics(sf::Time dt)
 {
-	////// 计算FPS  TODO
-	
+	////// 计算FPS  TODO  https://blog.csdn.net/allen807733144/article/details/82862558
 	////////////////////////////////////////////////////
-	mStatisticsUpdateTime += dt;
-	mStatisticsNumFrames += 1;
-	//method 1
+	//mStatisticsUpdateTime += dt;
+	//mStatisticsNumFrames += 1;
+	//method 1 固定一段时间，计算经过的帧数 （较多使用）
 	//if (mStatisticsUpdateTime >= sf::seconds(1.0f))
 	//{
 	//	mStatisticsText.setString("FPS: " + std::to_string(mStatisticsNumFrames));
@@ -148,27 +148,25 @@ void Game::UpdateStatistics(sf::Time dt)
 	//	mStatisticsNumFrames = 0;
 	//}
 
-	//method 2
-	if (mStatisticsNumFrames == 60)
-	{
-		mStatisticsText.setString("FPS: " + std::to_string(1.0 / mStatisticsUpdateTime.asSeconds() * 60.0).substr(0, 4));
-
-		//mStatisticsUpdateTime -= sf::seconds(1.0f);
-		mStatisticsUpdateTime = sf::Time::Zero;
-		mStatisticsNumFrames = 0;
-	}
+	//method 2 固定一定的帧数，计算经过的时间（较少使用）
+	//if (mStatisticsNumFrames == 60)
+	//{
+	//	mStatisticsUpdateTime -= sf::seconds(1.0f);
+	//	mStatisticsUpdateTime = sf::Time::Zero;
+	//	mStatisticsNumFrames = 0;
+	//}
 	////////////////////////////////////////////////////////
 
 
-	///////////////////////////////////////////////////////
-	//method 3
-	//mStatisticsUpdateTime += dt;
-	//if (mStatisticsUpdateTime >= sf::seconds(1.0f))
-	//{
-	//	mStatisticsText.setString("FPS: " + std::to_string(1000000.0f / dt.asMicroseconds()).substr(0, 4));
-	//	mStatisticsUpdateTime -= sf::seconds(1.0f);
-	//}
-	/////////////////////////////////////////////////////////
+	mStatisticsUpdateTime += dt;
+	mStatisticsNumFrames += 1;
+	if (mStatisticsUpdateTime >= sf::seconds(STATISTICS_UPDATE_TIME))
+	{
+		mStatisticsText.setString("FPS: " + std::to_string(int(mStatisticsNumFrames / STATISTICS_UPDATE_TIME)));
+		topLeftOrigin(mStatisticsText);
+		mStatisticsUpdateTime -= sf::seconds(STATISTICS_UPDATE_TIME);
+		mStatisticsNumFrames = 0;
+	}
 }
 
 void Game::RegisterStates()
