@@ -25,8 +25,8 @@ World::World(sf::RenderWindow& window)
 	// Prepare the view
 	mWorldView.setCenter(mSpawnPosition);
 
-	mWorldBounds = sf::FloatRect(0, 0, mTextures.get(Textures::Background).getSize().x,
-						               mTextures.get(Textures::Background).getSize().y);
+	mWorldBounds = sf::FloatRect(0, 0, float(mTextures.get(Textures::Background).getSize().x),
+		float(mTextures.get(Textures::Background).getSize().y));
 }
 
 void World::update(sf::Time dt)
@@ -135,7 +135,7 @@ void World::buildScene()
 	std::unique_ptr<Player> leader(new Player(mTextures.get(Textures::Player))); 
 	mPlayer = leader.get();
 	mPlayer->setPosition(mSpawnPosition);
-	mSceneLayers[Air]->attachChild(std::move(leader));
+	mSceneLayers[Land]->attachChild(std::move(leader));
 }
 
 ////// 角色行走，大地图角色边缘碰撞检测

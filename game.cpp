@@ -12,7 +12,7 @@
 #include <string>
 
 Game* Game::s_pGame = new Game();
-const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f); // FPS
 
 Game::Game()
 :mTextures()  
@@ -26,7 +26,7 @@ Game::Game()
 {
 	mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Kalpa", sf::Style::Default); // TODO：可以考虑支持sf::Style::Fullscreen，做一个配置文件，配置是否全屏，参考Cendric
 	mWindow.setKeyRepeatEnabled(false); // you will only get a single event when the key is pressed.
-	mWindow.setFramerateLimit(60);      // TODO
+	mWindow.setFramerateLimit(60);      // FPS限制  TODO
 
 	//载入icon
 	if (!mIcon.loadFromFile("./Media/icon.png"))
@@ -46,8 +46,8 @@ Game::Game()
 	RegisterStates();
 
 	//将第一个状态（TitleState）push到状态栈mStateStack中
-	mStateStack.pushState(States::Title);
-
+	//mStateStack.pushState(States::Title);  
+	mStateStack.pushState(States::Game);  // TODO：直接进入游戏，方便调试
 }
 
 Game::~Game()
@@ -69,7 +69,7 @@ void Game::Run()
 	while (mWindow.isOpen())
 	{
 		sf::Time dt = clock.restart(); //puts the time counter back to zero; returns the time elapsed
-		timeSinceLastUpdate += dt;
+		timeSinceLastUpdate += dt;  // dt means elapsedTime
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
 			timeSinceLastUpdate -= TimePerFrame;
@@ -107,12 +107,26 @@ void Game::Update(sf::Time dt)
 
 void Game::Render()
 {
-	//static int i = 0;
 	mWindow.clear();
 
 	mStateStack.draw();
 
-	mWindow.setView(mWindow.getDefaultView()); // clw note: 只有这样，该Text才会在人物行走之后，依然一直在窗口左上角https://www.sfml-dev.org/tutorials/2.5/graphics-view.php
+	// clw note: 只有像下面这样getDefaultView()，该Text才会在人物行走之后，依然一直在窗口左上角 
+	//           因为之前在World::draw()里面调用 mWindow.setView(mWorldView)，是因为场景图里面的东西，
+	//           包括角色都是被SceneNode通过attachChild()加载进来的，因此坐标其实是相对于最顶层的mSceneGraph,
+	//           自顶向下绘制的过程中，最顶层的一个虚拟的SceneNode在调用draw()的时候，会通过
+	//           states.transform *= getTransform() 会把该节点是否translate、rotate、scale等变换信息
+	//           传到子节点，因此子节点在做setPosition(80, -50)等操作时，是相对于上层节点的位置而不是
+	//           相对于窗口的位置；因此比如人物最开始在窗口中心点(800, 600)向右行走到(900, 600)，此时的视角
+	//           mWorldView需要也相应move(100, 0)，然后调用mWindow.setView(mWorldView)；虚拟的顶层SceneNode
+	//           的Position一直是(0, 0)
+	//           而对于通常情况下顶层并不会有SceneNode的sf::Text对象，就需要调用setView(mWindow.getDefaultView())，
+	//           即此时如果做setPosition等操作，则是对当前 窗口 的左上角坐标，也就是世界坐标(100, 0)，而不是
+	//           背景（大地图）的世界坐标(0, 0)
+	//           关于View，详见https://www.sfml-dev.org/tutorials/2.5/graphics-view.php
+	mWindow.setView(mWindow.getDefaultView()); 
+
+
 	mWindow.draw(mStatisticsText);
 
 	mWindow.display();

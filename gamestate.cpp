@@ -16,14 +16,14 @@ GameState::GameState(StateStack& stack, Context context)
 	sf::Font& font = context.fonts->get(Fonts::Main);
 
 	mPlayerPosX.setFont(font);
-	mPlayerPosX.setString("X_PlayerPos: 0000"); // clw TODO: 占位符，这样比如1000.0也能显示出来
+	mPlayerPosX.setString("X_Player: 0000"); // clw TODO: 占位符，这样比如1000.0也能显示出来
 	mPlayerPosX.setCharacterSize(FONT_SIZE_MIDDLE);
 	//playOption.setLetterSpacing(2);
 	topRightOrigin(mPlayerPosX);
 	mPlayerPosX.setPosition(sf::Vector2f(context.window->getView().getSize().x - MAP_FONT_BOARDER, MAP_FONT_BOARDER)); //clw note
 
 	mPlayerPosY.setFont(font);
-	mPlayerPosY.setString("Y_PlayerPos: 0000");
+	mPlayerPosY.setString("Y_Player: 0000");
 	mPlayerPosY.setCharacterSize(FONT_SIZE_MIDDLE);
 	//playOption.setLetterSpacing(2);
 	topRightOrigin(mPlayerPosY);
@@ -56,8 +56,8 @@ bool GameState::update(sf::Time dt)
 	{
 		mStatisticsUpdateTime -= sf::seconds(0.1f);
 
-		mPlayerPosX.setString("X_PlayerPos: " + std::to_string(int(mPlayer.getPosition().x)));
-		mPlayerPosY.setString("Y_PlayerPos: " + std::to_string(int(mPlayer.getPosition().y)));
+		mPlayerPosX.setString("X_Player: " + std::to_string(int(mPlayer.getPosition().x)));
+		mPlayerPosY.setString("Y_Player: " + std::to_string(int(mPlayer.getPosition().y)));
 	}
 	return true;
 }
