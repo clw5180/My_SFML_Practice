@@ -16,14 +16,14 @@ GameState::GameState(StateStack& stack, Context context)
 	sf::Font& font = context.fonts->get(Fonts::Main);
 
 	mPlayerPosX.setFont(font);
-	mPlayerPosX.setString("X_Player: 00000"); // clw TODO: 占位符，否则从999到1000的时候，如果是右上角对齐则会抖动
+	mPlayerPosX.setString("xPlayer: 00000"); // clw TODO: 占位符，否则从999到1000的时候，如果是右上角对齐则会抖动
 	mPlayerPosX.setCharacterSize(FONT_SIZE_MIDDLE);
 	//playOption.setLetterSpacing(2);
 	mPlayerPosX.setPosition(sf::Vector2f(context.window->getView().getSize().x - MAP_FONT_BOARDER, MAP_FONT_BOARDER)); //clw note
 	topRightOrigin(mPlayerPosX);  // 在初始化的时候把长度定死，否则右对齐的时候，从999到1000会比较麻烦
 
 	mPlayerPosY.setFont(font);
-	mPlayerPosY.setString("Y_Player: 00000");
+	mPlayerPosY.setString("yPlayer: 00000");
 	mPlayerPosY.setCharacterSize(FONT_SIZE_MIDDLE);
 	mPlayerPosY.setPosition(sf::Vector2f(context.window->getView().getSize().x - MAP_FONT_BOARDER, MAP_FONT_BOARDER) + sf::Vector2f(0.f, 50.f)); //clw note
 	topRightOrigin(mPlayerPosY);
@@ -58,12 +58,12 @@ bool GameState::update(sf::Time dt)
 		//FPS小数点后保留一位
 		std::string strPosX = std::to_string(int(mPlayer.getPosition().x));
 		int pos = strPosX.length();
-		mPlayerPosX.setString("X_Player: " + strPosX);
+		mPlayerPosX.setString("xPlayer: " + strPosX);
 		//topRightOrigin(mPlayerPosX); // 因为strPosX长度一直在变化，所以每次更新都要重新让输出文字右上角对齐
 
 		std::string strPosY = std::to_string(int(mPlayer.getPosition().y));
 		pos = strPosY.length();
-		mPlayerPosY.setString("Y_Player: " + strPosY);
+		mPlayerPosY.setString("yPlayer: " + strPosY);
 	}
 
 	return true;

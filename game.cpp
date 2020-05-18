@@ -17,17 +17,15 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / FPS);
 Game::Game()
 :mTextures()  
 , mFonts()     
-//, mPlayer()      // TODO：这里去掉，只在World里面加
 , mStateStack(State::Context(mWindow, mTextures, mFonts))
-//, mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer))
 , mStatisticsText()
 , mStatisticsUpdateTime()
 , mStatisticsNumFrames()
 {
 	mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Kalpa", sf::Style::Default); // TODO：可以考虑支持sf::Style::Fullscreen，做一个配置文件，配置是否全屏，参考Cendric
-	mWindow.setKeyRepeatEnabled(false); // you will only get a single event when the key is pressed.
-	//mWindow.setFramerateLimit(60);      // FPS限制，导致非实时渲染  TODO
-	//mWindow.setVerticalSyncEnabled(true);   // FPS限制，导致非实时渲染  TODO
+	mWindow.setKeyRepeatEnabled(false); // disabled repeated KeyPressed events, you will only get a single event when the key is pressed. 
+	//mWindow.setFramerateLimit(60);      // FPS限制，导致非实时渲染  
+	//mWindow.setVerticalSyncEnabled(true);   // FPS限制，导致非实时渲染，这两句不能同时用  TODO
 
 	//载入icon
 	if (!mIcon.loadFromFile("./Media/icon.png"))

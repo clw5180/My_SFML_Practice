@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/RectangleShape.hpp> // for debug
 
 #include <map>
 #include <string>
@@ -80,7 +81,7 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 	}
 }
 
-void Player::handleRealtimeInput(CommandQueue& commands)  // 处理上下左右这种实时输入
+void Player::handleRealtimeInput(CommandQueue& commands)  // 处理上下左右行走 这种实时输入
 {
 	// Traverse all assigned keys and check if they are pressed
 	for(auto pair : mKeyBinding)
@@ -152,6 +153,17 @@ unsigned int Player::getCategory() const
 void Player::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(mSprite, states);
+
+	if (DEBUG)
+	{
+		sf::FloatRect boundingBox = mSprite.getGlobalBounds();
+		sf::RectangleShape rectangle(sf::Vector2f(boundingBox.width, boundingBox.height));
+		rectangle.setPosition(boundingBox.left, boundingBox.top);
+		rectangle.setOutlineColor(sf::Color(255, 0, 0));
+		rectangle.setOutlineThickness(2.0);
+		rectangle.setFillColor(sf::Color(0, 0, 0, 0)); // clw note: set alpha = 0, 从实心矩形变成透明矩形
+		target.draw(rectangle, states);
+	}
 }
 
 void Player::updateCurrent(sf::Time dt)

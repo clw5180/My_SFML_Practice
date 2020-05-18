@@ -110,7 +110,7 @@ void Animation::update(sf::Time dt)
 	
 	// While we have a frame to process
 	while (mElapsedTime >= timePerFrame && (mCurrentFrame <= mNumFrames || mRepeat)) //如果经过mElapsedTime，并且动画还没执行完，那么就切换到下一帧
-	{                                                                                //默认mRepeat=False，也就是动画只执行一次；否则如果是True,
+	{                                                                                //默认mRepeat=false，也就是动画只执行一次；否则如果是True,
 		                                                                             //就不用考虑mCurrentFrame <= mNumFrames了
 		// Move the texture rect left
 		textureRect.left += textureRect.width;
